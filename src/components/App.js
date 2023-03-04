@@ -22,11 +22,18 @@ class App extends Component {
   };
 
   onSubmit = searchData => {
+    if (this.state.searchData === searchData.trim()) {
+      return this.toastInfoDuplication();
+    }
     this.setState({
       searchData,
       page: 1,
       images: [],
     });
+  };
+
+  toastInfoDuplication = () => {
+    return toast.info('You are already here!', this.toastSettings);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -88,22 +95,10 @@ class App extends Component {
         )}
         {isLoading && <ImageLoader />}
         {images.length >= 12 && <Button nextPage={nextPage} />}
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={1500} />
       </div>
     );
   }
 }
 
 export default App;
-
-// response.then(foundData => {
-//           foundData.data.hits.length === 0
-//             ? toast.error('Better luck next time!')
-//             : foundData.data.hits.forEach(
-//                 ({ id, webformatURL, largeImageURL }) => {
-//                   !images.some(image => image.id === id) &&
-//                     this.setState(({ images }) => ({
-//                       images: [...images, { id, webformatURL, largeImageURL }],
-//                     }));
-//                 }
-//               );
